@@ -2,8 +2,14 @@
 
 module DDD {
 
-    export interface Entitiy {
-        identify(): Identify;
+    export interface Entity {
+    }
+
+    export class AbstractEntity implements Entity {
+        
+        constructor(public indetify: Identify) {
+
+        }
     }
 
 }
