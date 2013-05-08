@@ -18,23 +18,27 @@ describe('Identify', () => {
             expect(identify.getValue()).to.equal(10);
         });
 
-        it('should `equals` returns `true` if given self', () => {
-            expect(identify.equals(identify)).to.be.true;
-        });
+        describe('equals method', () => {
 
-        it('should `equals` returns `true` if given equals value object', () => {
-            var right = new DDD.NumberIdentify(10);
-            expect(identify.equals(right)).to.be.true;
-        });
+            it('should be true if given self', () => {
+                expect(identify.equals(identify)).to.be.true;
+            });
 
-        it('should `equals` returns `false` if given not equals value object', () => {
-            var right = new DDD.NumberIdentify(20);
-            expect(identify.equals(right)).to.be.false;
-        });
+            it('should be true if given idenfity that has equiv value', () => {
+                var right = new DDD.NumberIdentify(10);
+                expect(identify.equals(right)).to.be.true;
+            });
 
-        it('should `equals` returns `false` if given null', () => {
-            expect(identify.equals(null)).to.be.false;
+            it('should be false if given null', () => {
+                expect(identify.equals(null)).to.be.false;
+            });
+
+            it('should be false if given idenfity that has not equiv value', () => {
+                var right = new DDD.NumberIdentify(20);
+                expect(identify.equals(right)).to.be.false;
+            });
+
         });
     });
-    
+
 });
