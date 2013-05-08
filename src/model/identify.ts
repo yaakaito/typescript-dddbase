@@ -13,7 +13,7 @@ module DDD {
             return this.value;
         }
 
-        public equals(that: any) {
+        public equals(that: any): bool {
             if (that == null) {
                 return false;
             }
