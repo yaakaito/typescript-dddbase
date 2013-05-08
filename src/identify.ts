@@ -24,4 +24,11 @@ module DDD {
             return this.value === that.getValue();
         }
     }
+
+    export class NumberIdentify extends AbstractIdentify {
+
+        constructor(private value: number) {
+            super(value);
+        }
+    }
 }
