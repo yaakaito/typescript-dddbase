@@ -22,18 +22,20 @@ module.exports = (grunt) ->
         clean:
             type:
                 src: ['compiled/**/*.js', 'compiled/*']
+            build:
+                src: ['build/**/*.js']
 
         concat:
             dist:
                 src: ['compiled/src/**/*.js']
-                dest: 'build/index.js'
+                dest: 'build/dddbase.js'
             options:
                 separator: ';'
 
         uglify:
             min:
                 files:
-                    'build/index.min.js': ['build/index.js']
+                    'build/dddbase.min.js': ['build/dddbase.js']
             ###
             options:
                 mangle:
@@ -77,7 +79,7 @@ module.exports = (grunt) ->
     grunt.registerTask 'compile', ['typescript']
     grunt.registerTask 'type', ['typescript']
     grunt.registerTask 'default', ['type']
-    grunt.registerTask 'build', ['concat', 'uglify']
+    grunt.registerTask 'build', ['typescript:compile', 'concat', 'uglify']
     grunt.registerTask 'generate', ['compile', 'build', 'copy:public']
     grunt.registerTask 'preview', ['generate', 'connect:preview', 'regarde']
 
