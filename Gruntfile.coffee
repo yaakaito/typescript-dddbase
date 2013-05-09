@@ -43,20 +43,6 @@ module.exports = (grunt) ->
                 sourceMap: 'build/source-map.js'
             ###
 
-        copy:
-            public:
-                files: [
-                        expand: true
-                        cwd: 'build'
-                        src: '**'
-                        dest: 'public/javascript'
-                    ,
-                        expand: true
-                        cwd: 'res'
-                        src: '**'
-                        dest: 'public/'
-                ]
-
         connect:
             preview:
                 options:
@@ -80,6 +66,4 @@ module.exports = (grunt) ->
     grunt.registerTask 'type', ['typescript']
     grunt.registerTask 'default', ['type']
     grunt.registerTask 'build', ['typescript:compile', 'concat', 'uglify']
-    grunt.registerTask 'generate', ['compile', 'build', 'copy:public']
-    grunt.registerTask 'preview', ['generate', 'connect:preview', 'regarde']
 
