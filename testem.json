@@ -6,7 +6,7 @@
         "test/**/*.ts"
     ],
     "serve_files" : [
-        "compiled/src/**/*.js",
+        "compiled/src/dddbase.js",
         "compiled/test/**/*.js"
     ]
 }
