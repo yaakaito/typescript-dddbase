@@ -3,10 +3,8 @@ module.exports = (grunt) ->
         pkg: grunt.file.readJSON 'package.json'
         typescript:
             compile:
-                src: ['src/**/*.ts']
-                dest: 'compiled'
-                # src: ['src/index.ts']
-                # dest: 'compiled/src/index.ts'
+                src: ['src/dddbase.ts']
+                dest: 'compiled/src/dddbase.js'
                 options:
                     module: 'commonjs'
                     target: 'es5'
@@ -27,7 +25,7 @@ module.exports = (grunt) ->
 
         concat:
             dist:
-                src: ['compiled/src/**/*.js']
+                src: ['compiled/src/dddbase.js']
                 dest: 'build/dddbase.js'
             options:
                 separator: ';'
