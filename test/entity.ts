@@ -11,44 +11,47 @@ class Person extends DDD.AbstractEntity {
     }
 }
 
-describe('Entity', () => {
+module DDD.Spec {
 
-    var expect = chai.expect;
+    describe('Entity', () => {
 
-    var identify;
-    var person;
-    beforeEach(() => {
-        identify = new DDD.NumberIdentify(10);
-        person = new Person(identify, 'yaakaito');
-    });
+        var expect = chai.expect;
 
-    it('has identify', () => {
-        expect(person.getIdentify().getValue()).to.equal(10);    
-    });
-
-    it('has name property', () => {
-        expect(person.name).to.equal('yaakaito');
-    });
-
-    describe('equals method', () => {
-
-        it('should be true if given self', () => {
-            expect(person.equals(person)).to.be.true;
+        var identify;
+        var person;
+        beforeEach(() => {
+            identify = new DDD.NumberIdentify(10);
+            person = new Person(identify, 'yaakaito');
         });
 
-        it('should be true if given entity that has equiv identify.', () => {
-            var right = new Person(identify, 'yaakaito2');
-            expect(person.equals(right)).to.be.true;   
+        it('has identify', () => {
+            expect(person.getIdentify().getValue()).to.equal(10);    
         });
 
-        it('should be false if given null', () => {
-            expect(person.equals(null)).to.be.false;
+        it('has name property', () => {
+            expect(person.name).to.equal('yaakaito');
         });
 
-        it('should be false if given entity that has not equiv identify', () => {
-            var rightIdenfity = new DDD.NumberIdentify(20);
-            var right = new Person(rightIdenfity, 'yaakaito2');
-            expect(person.equals(right)).to.be.false;
+        describe('equals method', () => {
+
+            it('should be true if given self', () => {
+                expect(person.equals(person)).to.be.true;
+            });
+
+            it('should be true if given entity that has equiv identify.', () => {
+                var right = new Person(identify, 'yaakaito2');
+                expect(person.equals(right)).to.be.true;   
+            });
+
+            it('should be false if given null', () => {
+                expect(person.equals(null)).to.be.false;
+            });
+
+            it('should be false if given entity that has not equiv identify', () => {
+                var rightIdenfity = new DDD.NumberIdentify(20);
+                var right = new Person(rightIdenfity, 'yaakaito2');
+                expect(person.equals(right)).to.be.false;
+            });
         });
     });
-});
+}

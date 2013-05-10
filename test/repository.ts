@@ -4,7 +4,7 @@
 /// <reference path="../d.ts/mocha.d.ts" />
 /// <reference path="../d.ts/chai.d.ts" />
 
-module DDD {
+module DDD.Spec {
 
     class Person extends AbstractEntity {
 
