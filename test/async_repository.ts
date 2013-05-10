@@ -81,6 +81,24 @@ module DDD {
                         });
                     });
                 });
+
+                it('can async delete stored entity with it', (done) => {
+                    repository.store(person);
+                    repository.deleteAsyncByEntity(person).onComplete(() => {
+                        var entity = repository.resolveWithIdentify(identify);
+                        expect(entity).to.undefined;
+                        done();
+                    });
+                });
+
+                it('can async delete stored entity with its identify', (done) => {
+                    repository.store(person);
+                    repository.deleteAsyncByIdentify(identify).onComplete(() => {
+                        var entity = repository.resolveWithIdentify(identify);
+                        expect(entity).to.undefined;
+                        done();
+                    });
+                });
             });
         });
     });
