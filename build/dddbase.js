@@ -5,14 +5,14 @@ var __extends = this.__extends || function (d, b) {
 };
 var DDD;
 (function (DDD) {
-    var AbstractIdentify = (function () {
-        function AbstractIdentify(value) {
+    var AbstractIdentity = (function () {
+        function AbstractIdentity(value) {
             this.value = value;
         }
-        AbstractIdentify.prototype.getValue = function () {
+        AbstractIdentity.prototype.getValue = function () {
             return this.value;
         };
-        AbstractIdentify.prototype.equals = function (that) {
+        AbstractIdentity.prototype.equals = function (that) {
             if(that == null) {
                 return false;
             }
@@ -21,27 +21,27 @@ var DDD;
             }
             return this.value === that.getValue();
         };
-        return AbstractIdentify;
+        return AbstractIdentity;
     })();
-    DDD.AbstractIdentify = AbstractIdentify;    
-    var NumberIdentify = (function (_super) {
-        __extends(NumberIdentify, _super);
-        function NumberIdentify(value) {
+    DDD.AbstractIdentity = AbstractIdentity;    
+    var NumberIdentity = (function (_super) {
+        __extends(NumberIdentity, _super);
+        function NumberIdentity(value) {
                 _super.call(this, value);
             this.value = value;
         }
-        return NumberIdentify;
-    })(AbstractIdentify);
-    DDD.NumberIdentify = NumberIdentify;    
+        return NumberIdentity;
+    })(AbstractIdentity);
+    DDD.NumberIdentity = NumberIdentity;    
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
     var AbstractEntity = (function () {
-        function AbstractEntity(identify) {
-            this.identify = identify;
+        function AbstractEntity(identity) {
+            this.identity = identity;
         }
-        AbstractEntity.prototype.getIdentify = function () {
-            return this.identify;
+        AbstractEntity.prototype.getIdentity = function () {
+            return this.identity;
         };
         AbstractEntity.prototype.equals = function (that) {
             if(that == null) {
@@ -50,7 +50,7 @@ var DDD;
             if(this == that) {
                 return true;
             }
-            return this.identify.equals(that.getIdentify());
+            return this.identity.equals(that.getIdentity());
         };
         return AbstractEntity;
     })();
@@ -63,18 +63,18 @@ var DDD;
             this.entities = {
             };
         }
-        OnMemoryRepository.prototype.resolveWithIdentify = function (identify) {
-            return this.entities[identify.getValue()];
+        OnMemoryRepository.prototype.resolveWithIdentity = function (identity) {
+            return this.entities[identity.getValue()];
         };
         OnMemoryRepository.prototype.store = function (entity) {
-            this.entities[entity.getIdentify().getValue()] = entity;
+            this.entities[entity.getIdentity().getValue()] = entity;
             return entity;
         };
         OnMemoryRepository.prototype.deleteByEntity = function (entity) {
-            this.deleteByIdentify(entity.getIdentify());
+            this.deleteByIdentity(entity.getIdentity());
         };
-        OnMemoryRepository.prototype.deleteByIdentify = function (identify) {
-            delete this.entities[identify.getValue()];
+        OnMemoryRepository.prototype.deleteByIdentity = function (identity) {
+            delete this.entities[identity.getValue()];
         };
         return OnMemoryRepository;
     })();
@@ -92,16 +92,16 @@ var DDD;
             this.store(entity);
             return this.createResolver().resolve(entity);
         };
-        AsyncOnMemoryRepository.prototype.resolveAsyncWithIdentify = function (identify) {
-            var entity = this.resolveWithIdentify(identify);
+        AsyncOnMemoryRepository.prototype.resolveAsyncWithIdentity = function (identity) {
+            var entity = this.resolveWithIdentity(identity);
             return this.createResolver().resolve(entity);
         };
         AsyncOnMemoryRepository.prototype.deleteAsyncByEntity = function (entity) {
             this.deleteByEntity(entity);
             return this.createResolver().resolve();
         };
-        AsyncOnMemoryRepository.prototype.deleteAsyncByIdentify = function (identify) {
-            this.deleteByIdentify(identify);
+        AsyncOnMemoryRepository.prototype.deleteAsyncByIdentity = function (identity) {
+            this.deleteByIdentity(identity);
             return this.createResolver().resolve();
         };
         return AsyncOnMemoryRepository;

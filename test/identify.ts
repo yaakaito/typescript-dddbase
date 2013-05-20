@@ -1,42 +1,42 @@
-/// <reference path="../src/identify.ts" />
+/// <reference path="../src/identity.ts" />
 /// <reference path="../d.ts/mocha.d.ts" />
 /// <reference path="../d.ts/chai.d.ts" />
 
 module DDD.Spec {
 
-    describe('Identify', () => {
+    describe('Identity', () => {
 
         var expect = chai.expect;
 
-        describe('NumberIdentify', () => {
+        describe('NumberIdentity', () => {
 
-            var identify;
+            var identity;
             beforeEach(() => {
-                identify = new DDD.NumberIdentify(10);
+                identity = new DDD.NumberIdentity(10);
             });
 
             it('can create by number', () => {
-                expect(identify.getValue()).to.equal(10);
+                expect(identity.getValue()).to.equal(10);
             });
 
             describe('equals method', () => {
 
                 it('should be true if given self', () => {
-                    expect(identify.equals(identify)).to.be.true;
+                    expect(identity.equals(identity)).to.be.true;
                 });
 
                 it('should be true if given idenfity that has equiv value', () => {
-                    var right = new DDD.NumberIdentify(10);
-                    expect(identify.equals(right)).to.be.true;
+                    var right = new DDD.NumberIdentity(10);
+                    expect(identity.equals(right)).to.be.true;
                 });
 
                 it('should be false if given null', () => {
-                    expect(identify.equals(null)).to.be.false;
+                    expect(identity.equals(null)).to.be.false;
                 });
 
                 it('should be false if given idenfity that has not equiv value', () => {
-                    var right = new DDD.NumberIdentify(20);
-                    expect(identify.equals(right)).to.be.false;
+                    var right = new DDD.NumberIdentity(20);
+                    expect(identity.equals(right)).to.be.false;
                 });
 
             });

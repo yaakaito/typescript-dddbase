@@ -1,11 +1,11 @@
 module DDD {
 
-    export interface Identify {
+    export interface Identity {
         getValue(): any;
-        equals(that: Identify): bool;
+        equals(that: Identity): bool;
     }
 
-    export class AbstractIdentify implements Identify {
+    export class AbstractIdentity implements Identity {
 
         constructor(private value: any) { }
 
@@ -25,7 +25,7 @@ module DDD {
         }
     }
 
-    export class NumberIdentify extends AbstractIdentify {
+    export class NumberIdentity extends AbstractIdentity {
 
         constructor(private value: number) {
             super(value);

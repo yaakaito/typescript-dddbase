@@ -1,4 +1,4 @@
-/// <reference path="../src/identify.ts" />
+/// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
 /// <reference path="../src/repository.ts" />
 /// <reference path="../d.ts/mocha.d.ts" />
@@ -8,8 +8,8 @@ module DDD.Spec {
 
     class Person extends AbstractEntity {
 
-        constructor(identify: DDD.Identify, public name: string) {
-            super(identify);
+        constructor(identity: DDD.Identity, public name: string) {
+            super(identity);
         }
     }
 
@@ -20,15 +20,15 @@ module DDD.Spec {
         describe('OnMemoryRepository', () => {
 
             var repository;
-            var identify;
+            var identity;
             var name;
             var person;
 
             beforeEach(() => {
                 repository = new OnMemoryRepository();
-                identify = new NumberIdentify(10);
+                identity = new NumberIdentity(10);
                 name = 'yaakaito';
-                person = new Person(identify, name);
+                person = new Person(identity, name);
 
             });
 
@@ -36,7 +36,7 @@ module DDD.Spec {
                 var stored = repository.store(person);
                 expect(stored).to.equal(person);
                 
-                var resolved = repository.resolveWithIdentify(identify);
+                var resolved = repository.resolveWithIdentity(identity);
                 expect(resolved).to.equal(person);    
 
             });
@@ -45,16 +45,16 @@ module DDD.Spec {
                 repository.store(person);
 
                 repository.deleteByEntity(person);
-                var resolved = repository.resolveWithIdentify(identify);
+                var resolved = repository.resolveWithIdentity(identity);
 
                 expect(resolved).to.be.undefined;
             });
 
-            it('can delete stored entity with its identify', () => {
+            it('can delete stored entity with its identity', () => {
                 repository.store(person);
 
-                repository.deleteByIdentify(identify);
-                var resolved = repository.resolveWithIdentify(identify);
+                repository.deleteByIdentity(identity);
+                var resolved = repository.resolveWithIdentity(identity);
 
                 expect(resolved).to.be.undefined;
             });

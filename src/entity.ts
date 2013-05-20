@@ -1,18 +1,18 @@
-/// <reference path="./identify.ts" />
+/// <reference path="./identity.ts" />
 
 module DDD {
 
     export interface Entity {
-        getIdentify(): Identify;
+        getIdentity(): Identity;
         equals(that: Entity): bool;
     }
 
     export class AbstractEntity implements Entity {
         
-        constructor(private identify: Identify) { }
+        constructor(private identity: Identity) { }
 
-        public getIdentify(): Identify {
-           return this.identify;
+        public getIdentity(): Identity {
+           return this.identity;
         }
 
         public equals(that: Entity): bool {
@@ -22,7 +22,7 @@ module DDD {
             if (this == that) {
                 return true;
             }
-            return this.identify.equals(that.getIdentify());
+            return this.identity.equals(that.getIdentity());
         }
 
     }

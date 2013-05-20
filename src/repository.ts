@@ -1,4 +1,4 @@
-/// <reference path="./identify.ts" />
+/// <reference path="./identity.ts" />
 /// <reference path="./entity.ts" />
 
 
@@ -7,31 +7,31 @@ module DDD {
     export interface Repository {
         store(entity: Entity): Entity;
         deleteByEntity(entity: Entity);
-        deleteByIdentify(identify: Identify);
+        deleteByIdentity(identity: Identity);
     }
 
     export class OnMemoryRepository implements Repository {
         private entities: any = {};
 
-        public resolveWithIdentify(identify: Identify): Entity {
+        public resolveWithIdentity(identity: Identity): Entity {
             // TODO:
-            return this.entities[identify.getValue()];
+            return this.entities[identity.getValue()];
         }
 
         public store(entity: Entity): Entity {
             // TODO:
-            this.entities[entity.getIdentify().getValue()] = entity;
+            this.entities[entity.getIdentity().getValue()] = entity;
             return entity;
         }
 
         public deleteByEntity(entity: Entity) {
             // TODO:
-            this.deleteByIdentify(entity.getIdentify());
+            this.deleteByIdentity(entity.getIdentity());
         }
 
-        public deleteByIdentify(identify: Identify) {
+        public deleteByIdentity(identity: Identity) {
             // TODO:
-            delete this.entities[identify.getValue()];
+            delete this.entities[identity.getValue()];
         }
     }
 }

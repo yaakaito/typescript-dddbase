@@ -1,13 +1,13 @@
 /// <reference path="../src/entity.ts" />
-/// <reference path="../src/identify.ts" />
+/// <reference path="../src/identity.ts" />
 /// <reference path="../d.ts/mocha.d.ts" />
 /// <reference path="../d.ts/chai.d.ts" />
 
 
 class Person extends DDD.AbstractEntity {
 
-    constructor(identify: DDD.Identify, public name: string) {
-        super(identify);
+    constructor(identity: DDD.Identity, public name: string) {
+        super(identity);
     }
 }
 
@@ -17,15 +17,15 @@ module DDD.Spec {
 
         var expect = chai.expect;
 
-        var identify;
+        var identity;
         var person;
         beforeEach(() => {
-            identify = new DDD.NumberIdentify(10);
-            person = new Person(identify, 'yaakaito');
+            identity = new DDD.NumberIdentity(10);
+            person = new Person(identity, 'yaakaito');
         });
 
-        it('has identify', () => {
-            expect(person.getIdentify().getValue()).to.equal(10);    
+        it('has identity', () => {
+            expect(person.getIdentity().getValue()).to.equal(10);    
         });
 
         it('has name property', () => {
@@ -38,8 +38,8 @@ module DDD.Spec {
                 expect(person.equals(person)).to.be.true;
             });
 
-            it('should be true if given entity that has equiv identify.', () => {
-                var right = new Person(identify, 'yaakaito2');
+            it('should be true if given entity that has equiv identity.', () => {
+                var right = new Person(identity, 'yaakaito2');
                 expect(person.equals(right)).to.be.true;   
             });
 
@@ -47,8 +47,8 @@ module DDD.Spec {
                 expect(person.equals(null)).to.be.false;
             });
 
-            it('should be false if given entity that has not equiv identify', () => {
-                var rightIdenfity = new DDD.NumberIdentify(20);
+            it('should be false if given entity that has not equiv identity', () => {
+                var rightIdenfity = new DDD.NumberIdentity(20);
                 var right = new Person(rightIdenfity, 'yaakaito2');
                 expect(person.equals(right)).to.be.false;
             });

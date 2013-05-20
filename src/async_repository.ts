@@ -1,4 +1,4 @@
-/// <reference path="./identify.ts" />
+/// <reference path="./identity.ts" />
 /// <reference path="./entity.ts" />
 /// <reference path="./repository.ts" />
 
@@ -7,15 +7,15 @@ module DDD {
 
     export interface Resolver {
         resolve(entity: Entity): Resolver;
-        resolve(identify: Identify): Resolver;
+        resolve(identity: Identity): Resolver;
         resolve(): Resolver;
     }
 
     export interface AsyncRepository {
         storeAsync(entity: Entity): Resolver;
-        resolveAsyncWithIdentify(identify: Identify): Resolver;
+        resolveAsyncWithIdentity(identity: Identity): Resolver;
         deleteAsyncByEntity(entity: Entity): Resolver;
-        deleteAsyncByIdentify(identify: Identify): Resolver;
+        deleteAsyncByIdentity(identity: Identity): Resolver;
     }
 
     export class AsyncOnMemoryRepository extends OnMemoryRepository implements AsyncRepository {
@@ -29,8 +29,8 @@ module DDD {
             return this.createResolver().resolve(entity);
         }
 
-        public resolveAsyncWithIdentify(identify: Identify): Resolver {
-            var entity = this.resolveWithIdentify(identify);
+        public resolveAsyncWithIdentity(identity: Identity): Resolver {
+            var entity = this.resolveWithIdentity(identity);
             return this.createResolver().resolve(entity);
         }
 
@@ -39,8 +39,8 @@ module DDD {
             return this.createResolver().resolve();
         }
 
-        public deleteAsyncByIdentify(identify: Identify): Resolver {
-            this.deleteByIdentify(identify);
+        public deleteAsyncByIdentity(identity: Identity): Resolver {
+            this.deleteByIdentity(identity);
             return this.createResolver().resolve();
         }
     }

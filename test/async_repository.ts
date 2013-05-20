@@ -1,4 +1,4 @@
-/// <reference path="../src/identify.ts" />
+/// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
 /// <reference path="../src/async_repository.ts" />
 /// <reference path="../d.ts/mocha.d.ts" />
@@ -8,8 +8,8 @@ module DDD.Spec {
 
     class Person extends AbstractEntity {
 
-        constructor(identify: DDD.Identify, public name: string) {
-            super(identify);
+        constructor(identity: DDD.Identity, public name: string) {
+            super(identity);
         }
     }
 
@@ -20,7 +20,7 @@ module DDD.Spec {
         private callback: (target?: any) => any = null;
 
         public resolve(entity: Entity): Resolver;
-        public resolve(identify: Identify): Resolver;
+        public resolve(identity: Identity): Resolver;
         public resolve(): Resolver;
         public resolve(target?: any): Resolver {
             this.target = target;
@@ -55,13 +55,13 @@ module DDD.Spec {
 
         describe('OnMemoryRepository', () => {
 
-            var identify;
+            var identity;
             var name;
             var person;
             beforeEach(() => {
-                identify = new NumberIdentify(10);
+                identity = new NumberIdentity(10);
                 name = 'yaakaito';
-                person = new Person(identify, name);
+                person = new Person(identity, name);
             });
 
             describe('With SimpleResolver', () => {
@@ -75,7 +75,7 @@ module DDD.Spec {
                 it('can async store entity and async resolve it', (done) => {
                     repository.storeAsync(person).onComplete((entity: Entity) => {
                         expect(entity).to.equal(person);
-                        repository.resolveAsyncWithIdentify(identify).onComplete((entity: Entity) => {
+                        repository.resolveAsyncWithIdentity(identity).onComplete((entity: Entity) => {
                             expect(entity).to.equal(person);
                             done();
                         });
@@ -85,16 +85,16 @@ module DDD.Spec {
                 it('can async delete stored entity with it', (done) => {
                     repository.store(person);
                     repository.deleteAsyncByEntity(person).onComplete(() => {
-                        var entity = repository.resolveWithIdentify(identify);
+                        var entity = repository.resolveWithIdentity(identity);
                         expect(entity).to.undefined;
                         done();
                     });
                 });
 
-                it('can async delete stored entity with its identify', (done) => {
+                it('can async delete stored entity with its identity', (done) => {
                     repository.store(person);
-                    repository.deleteAsyncByIdentify(identify).onComplete(() => {
-                        var entity = repository.resolveWithIdentify(identify);
+                    repository.deleteAsyncByIdentity(identity).onComplete(() => {
+                        var entity = repository.resolveWithIdentity(identity);
                         expect(entity).to.undefined;
                         done();
                     });
