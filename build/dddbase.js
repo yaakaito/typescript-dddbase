@@ -13,10 +13,10 @@ var DDD;
             return this.value;
         };
         AbstractIdentity.prototype.equals = function (that) {
-            if(that == null) {
+            if (that == null) {
                 return false;
             }
-            if(this == that) {
+            if (this == that) {
                 return true;
             }
             return this.value === that.getValue();
@@ -27,8 +27,7 @@ var DDD;
     var NumberIdentity = (function (_super) {
         __extends(NumberIdentity, _super);
         function NumberIdentity(value) {
-                _super.call(this, value);
-            this.value = value;
+            _super.call(this, value);
         }
         return NumberIdentity;
     })(AbstractIdentity);
@@ -44,10 +43,10 @@ var DDD;
             return this.identity;
         };
         AbstractEntity.prototype.equals = function (that) {
-            if(that == null) {
+            if (that == null) {
                 return false;
             }
-            if(this == that) {
+            if (this == that) {
                 return true;
             }
             return this.identity.equals(that.getIdentity());
@@ -60,8 +59,7 @@ var DDD;
 (function (DDD) {
     var OnMemoryRepository = (function () {
         function OnMemoryRepository() {
-            this.entities = {
-            };
+            this.entities = {};
         }
         OnMemoryRepository.prototype.resolveWithIdentity = function (identity) {
             return this.entities[identity.getValue()];
@@ -85,7 +83,7 @@ var DDD;
     var AsyncOnMemoryRepository = (function (_super) {
         __extends(AsyncOnMemoryRepository, _super);
         function AsyncOnMemoryRepository(createResolver) {
-                _super.call(this);
+            _super.call(this);
             this.createResolver = createResolver;
         }
         AsyncOnMemoryRepository.prototype.storeAsync = function (entity) {

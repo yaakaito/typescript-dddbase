@@ -1,3 +1,3 @@
-module chai {
-    export declare function expect(value: any): any;
+declare module chai {
+    export function expect(value: any): any;
 }

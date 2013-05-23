@@ -27,7 +27,7 @@ module DDD {
 
     export class NumberIdentity extends AbstractIdentity {
 
-        constructor(private value: number) {
+        constructor(value: number) {
             super(value);
         }
     }
