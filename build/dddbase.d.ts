@@ -1,62 +1,63 @@
 declare module DDD {
-    interface Identity {
-        getValue(): any;
-        equals(that: Identity): boolean;
+    interface Identity<T> {
+        getValue(): T;
+        equals(that: Identity<T>): boolean;
     }
-    class AbstractIdentity implements Identity {
+    class AbstractIdentity<T> implements Identity<T> {
         private value;
-        constructor(value: any);
-        public getValue(): any;
-        public equals(that: any): boolean;
+        constructor(value: T);
+        public getValue(): T;
+        public equals(that: Identity<T>): boolean;
     }
-    class NumberIdentity extends AbstractIdentity {
+    class NumberIdentity extends AbstractIdentity<number> {
         constructor(value: number);
     }
 }
 declare module DDD {
-    interface Entity {
-        getIdentity(): Identity;
-        equals(that: Entity): boolean;
+    interface Entity<ID extends DDD.Identity<T>> {
+        getIdentity(): Identity<T>;
+        equals(that: Entity<ID extends DDD.Identity<T>>): boolean;
     }
-    class AbstractEntity implements Entity {
+    class AbstractEntity<ID extends DDD.Identity<T>> implements Entity<ID extends DDD.Identity<T>> {
         private identity;
-        constructor(identity: Identity);
-        public getIdentity(): Identity;
-        public equals(that: Entity): boolean;
+        constructor(identity: ID);
+        public getIdentity(): ID;
+        public equals(that: Entity<ID extends DDD.Identity<T>>): boolean;
     }
 }
 declare module DDD {
-    interface Repository {
-        store(entity: Entity): Entity;
-        deleteByEntity(entity: Entity);
-        deleteByIdentity(identity: Identity);
+    interface Repository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> {
+        store(entity: E): E;
+        deleteByEntity(entity: E);
+        deleteByIdentity(identity: ID);
     }
-    class OnMemoryRepository implements Repository {
+    class OnMemoryRepository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> implements Repository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> {
         private entities;
-        public resolveWithIdentity(identity: Identity): Entity;
-        public store(entity: Entity): Entity;
-        public deleteByEntity(entity: Entity): void;
-        public deleteByIdentity(identity: Identity): void;
+        public resolveWithIdentity(identity: ID): Entity<ID extends DDD.Identity<T>>;
+        public store(entity: E): E;
+        public deleteByEntity(entity: E): void;
+        public deleteByIdentity(identity: ID): void;
     }
 }
 declare module DDD {
-    interface Resolver {
-        resolve(entity: Entity): Resolver;
-        resolve(identity: Identity): Resolver;
-        resolve(): Resolver;
+    interface Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> {
+        resolve(entity: E): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        resolve(identity: Identity<any>): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        resolve(): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
     }
-    interface AsyncRepository {
-        storeAsync(entity: Entity): Resolver;
-        resolveAsyncWithIdentity(identity: Identity): Resolver;
-        deleteAsyncByEntity(entity: Entity): Resolver;
-        deleteAsyncByIdentity(identity: Identity): Resolver;
+    interface AsyncRepository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> {
+        storeAsync(entity: E): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        resolveAsyncWithIdentity(identity: ID): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        deleteAsyncByEntity(entity: E): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        deleteAsyncByIdentity(identity: ID): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
     }
-    class AsyncOnMemoryRepository extends OnMemoryRepository implements AsyncRepository {
-        private createResolver;
-        constructor(createResolver: () => Resolver);
-        public storeAsync(entity: Entity): Resolver;
-        public resolveAsyncWithIdentity(identity: Identity): Resolver;
-        public deleteAsyncByEntity(entity: Entity): Resolver;
-        public deleteAsyncByIdentity(identity: Identity): Resolver;
+    class AsyncOnMemoryRepository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> extends OnMemoryRepository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> implements AsyncRepository<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>> {
+        private Resolver;
+        constructor(Resolver: new() => Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>);
+        private createResolver();
+        public storeAsync(entity: E): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        public resolveAsyncWithIdentity(identity: ID): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        public deleteAsyncByEntity(entity: E): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
+        public deleteAsyncByIdentity(identity: ID): Resolver<ID extends DDD.Identity<T>, E extends Entity<ID extends DDD.Identity<T>>>;
     }
 }

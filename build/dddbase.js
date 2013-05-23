@@ -82,10 +82,13 @@ var DDD;
 (function (DDD) {
     var AsyncOnMemoryRepository = (function (_super) {
         __extends(AsyncOnMemoryRepository, _super);
-        function AsyncOnMemoryRepository(createResolver) {
+        function AsyncOnMemoryRepository(Resolver) {
             _super.call(this);
-            this.createResolver = createResolver;
+            this.Resolver = Resolver;
         }
+        AsyncOnMemoryRepository.prototype.createResolver = function () {
+            return new this.Resolver();
+        };
         AsyncOnMemoryRepository.prototype.storeAsync = function (entity) {
             this.store(entity);
             return this.createResolver().resolve(entity);
