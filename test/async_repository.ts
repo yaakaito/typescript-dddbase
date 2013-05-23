@@ -68,7 +68,7 @@ module DDD.Spec {
 
                 var repository;
                 beforeEach(() => {
-                    repository = new AsyncOnMemoryRepository(() => new SimpleResolver());
+                    repository = new AsyncOnMemoryRepository(SimpleResolver);
 
                 });
 

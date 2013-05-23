@@ -1,19 +1,19 @@
 module DDD {
 
-    export interface Identity {
-        getValue(): any;
-        equals(that: Identity): bool;
+    export interface Identity<T> {
+        getValue(): T;
+        equals(that: Identity<T>): boolean;
     }
 
-    export class AbstractIdentity implements Identity {
+    export class AbstractIdentity<T> implements Identity<T> {
 
-        constructor(private value: any) { }
+        constructor(private value: T) { }
 
-        public getValue(): any {
+        public getValue(): T {
             return this.value;
         }
 
-        public equals(that: any): bool {
+        public equals(that: Identity<T>): boolean {
             if (that == null) {
                 return false;
             }
@@ -25,7 +25,7 @@ module DDD {
         }
     }
 
-    export class NumberIdentity extends AbstractIdentity {
+    export class NumberIdentity extends AbstractIdentity<number> {
 
         constructor(value: number) {
             super(value);

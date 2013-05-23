@@ -5,41 +5,46 @@
 
 module DDD {
 
-    export interface Resolver {
-        resolve(entity: Entity): Resolver;
-        resolve(identity: Identity): Resolver;
-        resolve(): Resolver;
+    export interface Resolver<ID extends Identity, E extends Entity<ID>> {
+        resolve(entity: E): Resolver<ID, E>;
+        resolve(identity: Identity): Resolver<ID, E>; // FIXME:
+        resolve(): Resolver<ID, E>;
     }
 
-    export interface AsyncRepository {
-        storeAsync(entity: Entity): Resolver;
-        resolveAsyncWithIdentity(identity: Identity): Resolver;
-        deleteAsyncByEntity(entity: Entity): Resolver;
-        deleteAsyncByIdentity(identity: Identity): Resolver;
+    export interface AsyncRepository<ID extends Identity, E extends Entity<ID>> {
+        storeAsync(entity: E): Resolver<ID, E>;
+        resolveAsyncWithIdentity(identity: ID): Resolver<ID, E>;
+        deleteAsyncByEntity(entity: E): Resolver<ID, E>;
+        deleteAsyncByIdentity(identity: ID): Resolver<ID, E>;
     }
 
-    export class AsyncOnMemoryRepository extends OnMemoryRepository implements AsyncRepository {
+    export class AsyncOnMemoryRepository<ID extends Identity, E extends Entity<ID>>
+            extends OnMemoryRepository<ID, E> implements AsyncRepository<ID, E> {
 
-        constructor(private createResolver: () => Resolver) {
+        constructor(private Resolver: new() => Resolver<ID, E>) {
             super();
         }
 
-        public storeAsync(entity: Entity): Resolver {
+        private createResolver(): Resolver<ID, E> {
+            return new this.Resolver();
+        }
+
+        public storeAsync(entity: E): Resolver<ID, E> {
             this.store(entity);
             return this.createResolver().resolve(entity);
         }
 
-        public resolveAsyncWithIdentity(identity: Identity): Resolver {
+        public resolveAsyncWithIdentity(identity: ID): Resolver<ID, E> {
             var entity = this.resolveWithIdentity(identity);
             return this.createResolver().resolve(entity);
         }
 
-        public deleteAsyncByEntity(entity: Entity): Resolver {
+        public deleteAsyncByEntity(entity: E): Resolver<ID, E> {
             this.deleteByEntity(entity);
             return this.createResolver().resolve();
         }
 
-        public deleteAsyncByIdentity(identity: Identity): Resolver {
+        public deleteAsyncByIdentity(identity: ID): Resolver<ID, E> {
             this.deleteByIdentity(identity);
             return this.createResolver().resolve();
         }

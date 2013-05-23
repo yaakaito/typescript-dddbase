@@ -2,20 +2,20 @@
 
 module DDD {
 
-    export interface Entity {
+    export interface Entity<ID extends Identity> {
         getIdentity(): Identity;
-        equals(that: Entity): bool;
+        equals(that: Entity): boolean;
     }
 
-    export class AbstractEntity implements Entity {
+    export class AbstractEntity<ID extends Identity> implements Entity<ID> {
         
-        constructor(private identity: Identity) { }
+        constructor(private identity: ID) { }
 
-        public getIdentity(): Identity {
+        public getIdentity(): ID {
            return this.identity;
         }
 
-        public equals(that: Entity): bool {
+        public equals(that: Entity<ID>): boolean {
             if (that == null) {
                 return false;
             }

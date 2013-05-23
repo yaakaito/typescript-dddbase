@@ -4,33 +4,29 @@
 
 module DDD {
 
-    export interface Repository {
-        store(entity: Entity): Entity;
-        deleteByEntity(entity: Entity);
-        deleteByIdentity(identity: Identity);
+    export interface Repository<ID extends Identity, E extends Entity<ID>> {
+        store(entity: E): E;
+        deleteByEntity(entity: E);
+        deleteByIdentity(identity: ID);
     }
 
-    export class OnMemoryRepository implements Repository {
-        private entities: any = {};
+    export class OnMemoryRepository<ID extends Identity, E extends Entity<ID>> implements Repository<ID, E> {
+        private entities: Object = {};
 
-        public resolveWithIdentity(identity: Identity): Entity {
-            // TODO:
+        public resolveWithIdentity(identity: ID): Entity {
             return this.entities[identity.getValue()];
         }
 
-        public store(entity: Entity): Entity {
-            // TODO:
+        public store(entity: E): E {
             this.entities[entity.getIdentity().getValue()] = entity;
             return entity;
         }
 
-        public deleteByEntity(entity: Entity) {
-            // TODO:
+        public deleteByEntity(entity: E) {
             this.deleteByIdentity(entity.getIdentity());
         }
 
-        public deleteByIdentity(identity: Identity) {
-            // TODO:
+        public deleteByIdentity(identity: ID) {
             delete this.entities[identity.getValue()];
         }
     }
