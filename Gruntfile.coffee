@@ -41,6 +41,13 @@ module.exports = (grunt) ->
                         src: '**.d.ts'
                         dest: 'build/'
                 ]
+            dts:
+                files: [
+                        expand: true
+                        cwd: 'components/katana'
+                        src: 'katana.d.ts'
+                        dest: 'definitions/katana'
+                ]
 
         connect:
             preview:
