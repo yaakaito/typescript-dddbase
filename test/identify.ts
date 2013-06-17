@@ -1,6 +1,6 @@
 /// <reference path="../src/identity.ts" />
-/// <reference path="../d.ts/mocha.d.ts" />
-/// <reference path="../d.ts/chai.d.ts" />
+/// <reference path="../definitions/mocha/mocha.d.ts" />
+/// <reference path="../definitions/chai/chai.d.ts" />
 
 module DDD.Spec {
 

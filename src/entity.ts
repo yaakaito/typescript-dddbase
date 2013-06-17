@@ -2,12 +2,12 @@
 
 module DDD {
 
-    export interface Entity<ID extends Identity> {
-        getIdentity(): Identity;
-        equals(that: Entity): boolean;
+    export interface Entity<ID extends Identity<any>> {
+        getIdentity(): ID;
+        equals(that: Entity<ID>): boolean;
     }
 
-    export class AbstractEntity<ID extends Identity> implements Entity<ID> {
+    export class AbstractEntity<ID extends Identity<any>> implements Entity<ID> {
         
         constructor(private identity: ID) { }
 

@@ -1,26 +1,26 @@
 /// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
 /// <reference path="../src/async_repository.ts" />
-/// <reference path="../d.ts/mocha.d.ts" />
-/// <reference path="../d.ts/chai.d.ts" />
+/// <reference path="../definitions/mocha/mocha.d.ts" />
+/// <reference path="../definitions/chai/chai.d.ts" />
 
 module DDD.Spec {
 
-    class Person extends AbstractEntity {
+    class Person extends AbstractEntity<DDD.NumberIdentity> {
 
-        constructor(identity: DDD.Identity, public name: string) {
+        constructor(identity: DDD.NumberIdentity, public name: string) {
             super(identity);
         }
     }
 
-    class SimpleResolver implements Resolver {
+    class SimpleResolver implements Resolver<DDD.NumberIdentity, Person> {
 
         private target: any = null;
         private resolved: bool = false;
         private callback: (target?: any) => any = null;
 
-        public resolve(entity: Entity): Resolver;
-        public resolve(identity: Identity): Resolver;
+        public resolve(entity: Person): Resolver;
+        public resolve(identity: DDD.NumberIdentity): Resolver;
         public resolve(): Resolver;
         public resolve(target?: any): Resolver {
             this.target = target;
@@ -73,9 +73,9 @@ module DDD.Spec {
                 });
 
                 it('can async store entity and async resolve it', (done) => {
-                    repository.storeAsync(person).onComplete((entity: Entity) => {
+                    repository.storeAsync(person).onComplete((entity: Person) => {
                         expect(entity).to.equal(person);
-                        repository.resolveAsyncWithIdentity(identity).onComplete((entity: Entity) => {
+                        repository.resolveAsyncWithIdentity(identity).onComplete((entity: Person) => {
                             expect(entity).to.equal(person);
                             done();
                         });

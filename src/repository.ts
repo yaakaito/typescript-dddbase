@@ -4,13 +4,13 @@
 
 module DDD {
 
-    export interface Repository<ID extends Identity, E extends Entity<ID>> {
+    export interface Repository<ID extends Identity<any>, E extends Entity<ID>> {
         store(entity: E): E;
         deleteByEntity(entity: E);
         deleteByIdentity(identity: ID);
     }
 
-    export class OnMemoryRepository<ID extends Identity, E extends Entity<ID>> implements Repository<ID, E> {
+    export class OnMemoryRepository<ID extends Identity<any>, E extends Entity<ID>> implements Repository<ID, E> {
         private entities: Object = {};
 
         public resolveWithIdentity(identity: ID): Entity {

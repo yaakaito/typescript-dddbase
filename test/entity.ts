@@ -1,12 +1,12 @@
 /// <reference path="../src/entity.ts" />
 /// <reference path="../src/identity.ts" />
-/// <reference path="../d.ts/mocha.d.ts" />
-/// <reference path="../d.ts/chai.d.ts" />
+/// <reference path="../definitions/mocha/mocha.d.ts" />
+/// <reference path="../definitions/chai/chai.d.ts" />
 
 
-class Person extends DDD.AbstractEntity {
+class Person extends DDD.AbstractEntity<DDD.NumberIdentity> {
 
-    constructor(identity: DDD.Identity, public name: string) {
+    constructor(identity: DDD.NumberIdentity, public name: string) {
         super(identity);
     }
 }
