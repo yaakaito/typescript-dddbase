@@ -1,13 +1,22 @@
-tsc = "~/.typescript/bin/tsc"
-
 module.exports = (grunt) ->
     grunt.initConfig
         pkg: grunt.file.readJSON 'package.json'
-        exec:
+        typescript:
             compile:
-                cmd: -> "#{tsc} --out compiled/src/dddbase.js --declaration src/dddbase.ts"
+                src: ['src/dddbase.ts']
+                dest: 'compiled/src/dddbase.js'
+                options:
+                    module: 'commonjs'
+                    target: 'es3'
+                    # sourcemap: true
+                    declaration: true
+
             test:
-                cmd: -> "#{tsc} --out compiled/test test/*.ts"
+                src: ['test/**/*.ts']
+                dest: 'compiled'
+                options:
+                    module: 'commonjs'
+                    target: 'es3'
 
         clean:
             type:
@@ -33,22 +42,6 @@ module.exports = (grunt) ->
                 sourceMap: 'build/source-map.js'
             ###
 
-        copy:
-            build:
-                files: [
-                        expand: true
-                        cwd: 'compiled/src'
-                        src: '**.d.ts'
-                        dest: 'build/'
-                ]
-            dts:
-                files: [
-                        expand: true
-                        cwd: 'components/katana'
-                        src: 'katana.d.ts'
-                        dest: 'definitions/katana'
-                ]
-
         connect:
             preview:
                 options:
@@ -69,7 +62,7 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-regarde'
     grunt.loadNpmTasks 'grunt-exec'
 
-    grunt.registerTask 'compile', ['exec:compile', 'exec:test']
+    grunt.registerTask 'compile', ['typescript']
     grunt.registerTask 'default', ['compile']
-    grunt.registerTask 'build', ['exec:compile', 'concat', 'uglify', 'copy:build']
+    grunt.registerTask 'build', ['typescript:compile', 'concat', 'uglify', 'copy:build']
 
