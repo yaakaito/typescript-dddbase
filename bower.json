@@ -1,8 +1,7 @@
 {
-  "name": "project",
-  "version": "0.0.1",
+  "name": "typescript-dddbase",
+  "version": "0.1.0",
   "dependencies": {
-    "jquery": "~> 1.9",
-    "katana": "git://github.com/yaakaito/katana.git#~0.0.1"
+    "monapt": "git://github.com/yaakaito/monapt.git#~0.1.0"
   }
 }
