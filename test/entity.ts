@@ -4,7 +4,7 @@
 /// <reference path="../definitions/chai/chai.d.ts" />
 
 
-class Person extends DDD.AbstractEntity<DDD.NumberIdentity> {
+class Person extends DDD.Entity<DDD.NumberIdentity> {
 
     constructor(identity: DDD.NumberIdentity, public name: string) {
         super(identity);

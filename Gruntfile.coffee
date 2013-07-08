@@ -3,8 +3,8 @@ module.exports = (grunt) ->
         pkg: grunt.file.readJSON 'package.json'
         typescript:
             compile:
-                src: ['src/dddbase.ts']
-                dest: 'compiled/src/dddbase.js'
+                src: ['dddbase.ts']
+                dest: 'dddbase.js'
                 options:
                     module: 'commonjs'
                     target: 'es3'
@@ -34,7 +34,7 @@ module.exports = (grunt) ->
         uglify:
             min:
                 files:
-                    'build/dddbase.min.js': ['build/dddbase.js']
+                    'dddbase.min.js': ['dddbase.js']
             ###
             options:
                 mangle:
@@ -64,5 +64,5 @@ module.exports = (grunt) ->
 
     grunt.registerTask 'compile', ['typescript']
     grunt.registerTask 'default', ['compile']
-    grunt.registerTask 'build', ['typescript:compile', 'concat', 'uglify', 'copy:build']
+    grunt.registerTask 'build', ['typescript:compile', 'concat', 'uglify']
 

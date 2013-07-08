@@ -1,11 +1,6 @@
 module DDD {
 
-    export interface Identity<T> {
-        getValue(): T;
-        equals(that: Identity<T>): boolean;
-    }
-
-    export class AbstractIdentity<T> implements Identity<T> {
+    export class Identity<T> {
 
         constructor(private value: T) { }
 
@@ -25,7 +20,7 @@ module DDD {
         }
     }
 
-    export class NumberIdentity extends AbstractIdentity<number> {
+    export class NumberIdentity extends Identity<number> {
 
         constructor(value: number) {
             super(value);
