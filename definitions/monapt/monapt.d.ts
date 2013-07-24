@@ -1,1 +1,1 @@
-../../components/monapt/monapt.d.ts
+../../bower_components/monapt/monapt.d.ts
