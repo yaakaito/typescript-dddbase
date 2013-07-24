@@ -18,12 +18,21 @@ declare module DDD {
     }
 }
 declare module DDD {
-    class OnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<ID>> {
+    class OnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
         private entities;
         public resolveOption(identity: ID): monapt.Option<E>;
         public resolve(identity: ID): E;
         public store(entity: E): E;
-        public deleteByEntity(entity: E): void;
-        public deleteByIdentity(identity: ID): void;
+        public deleteByEntity(entity: E): OnMemoryRepository<ID, E>;
+        public deleteByIdentity(identity: ID): OnMemoryRepository<ID, E>;
+    }
+}
+declare module DDD {
+    class AsyncOnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
+        private core;
+        public resolve(identity: ID): monapt.Future<E>;
+        public store(entity: E): monapt.Future<E>;
+        public deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>>;
+        public deleteByIdentity(identity: ID): monapt.Future<AsyncOnMemoryRepository<ID, E>>;
     }
 }

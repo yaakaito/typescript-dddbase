@@ -1,52 +1,40 @@
 /// <reference path="./identity.ts" />
 /// <reference path="./entity.ts" />
 /// <reference path="./repository.ts" />
+/// <reference path="../definitions/monapt/monapt.d.ts" />
 
 
 module DDD {
 
-    export interface Resolver<ID extends Identity<any>, E extends Entity<ID>> {
-        resolve(entity: Entity<ID>): Resolver<ID, E>;
-        resolve(identity: ID): Resolver<ID, E>; // FIXME:
-        resolve(): Resolver<ID, E>;
-    }
+    export class AsyncOnMemoryRepository<ID extends Identity<any>, E extends Entity<any>> {
 
-    export interface AsyncRepository<ID extends Identity<any>, E extends Entity<ID>> {
-        storeAsync(entity: E): Resolver<ID, E>;
-        resolveAsyncWithIdentity(identity: ID): Resolver<ID, E>;
-        deleteAsyncByEntity(entity: E): Resolver<ID, E>;
-        deleteAsyncByIdentity(identity: ID): Resolver<ID, E>;
-    }
+        private core = new OnMemoryRepository<ID, E>();
 
-    export class AsyncOnMemoryRepository<ID extends Identity<any>, E extends Entity<ID>>
-            extends OnMemoryRepository<ID, E> implements AsyncRepository<ID, E> {
-
-        constructor(private Resolver: new() => Resolver<ID, E>) {
-            super();
+        resolve(identity: ID): monapt.Future<E> {
+            return monapt.future<E>(p => {
+                p.success(this.core.resolveOption(identity).get());
+            });
         }
 
-        private createResolver(): Resolver<ID, E> {
-            return new this.Resolver();
+        store(entity: E): monapt.Future<E> {
+            return monapt.future<E>(p => {
+                p.success(this.core.store(entity));
+            });
         }
 
-        public storeAsync(entity: E): Resolver<ID, E> {
-            this.store(entity);
-            return this.createResolver().resolve(entity);
+        deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
+            return monapt.future<AsyncOnMemoryRepository>(p => {
+                this.core.deleteByEntity(entity);
+                p.success(this);
+            });
         }
 
-        public resolveAsyncWithIdentity(identity: ID): Resolver<ID, E> {
-            var entity = this.resolveWithIdentity(identity);
-            return this.createResolver().resolve(entity);
-        }
-
-        public deleteAsyncByEntity(entity: E): Resolver<ID, E> {
-            this.deleteByEntity(entity);
-            return this.createResolver().resolve();
-        }
-
-        public deleteAsyncByIdentity(identity: ID): Resolver<ID, E> {
-            this.deleteByIdentity(identity);
-            return this.createResolver().resolve();
+        deleteByIdentity(identity: ID): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
+            return monapt.future<AsyncOnMemoryRepository>(p => {
+                this.core.deleteByIdentity(identity);
+                p.success(this);
+            });
         }
     }
+
 }

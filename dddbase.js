@@ -86,12 +86,53 @@ var DDD;
 
         OnMemoryRepository.prototype.deleteByEntity = function (entity) {
             this.deleteByIdentity(entity.getIdentity());
+            return this;
         };
 
         OnMemoryRepository.prototype.deleteByIdentity = function (identity) {
             delete this.entities[identity.getValue()];
+            return this;
         };
         return OnMemoryRepository;
     })();
     DDD.OnMemoryRepository = OnMemoryRepository;
+})(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
+    var AsyncOnMemoryRepository = (function () {
+        function AsyncOnMemoryRepository() {
+            this.core = new DDD.OnMemoryRepository();
+        }
+        AsyncOnMemoryRepository.prototype.resolve = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.resolveOption(identity).get());
+            });
+        };
+
+        AsyncOnMemoryRepository.prototype.store = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.store(entity));
+            });
+        };
+
+        AsyncOnMemoryRepository.prototype.deleteByEntity = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByEntity(entity);
+                p.success(_this);
+            });
+        };
+
+        AsyncOnMemoryRepository.prototype.deleteByIdentity = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByIdentity(identity);
+                p.success(_this);
+            });
+        };
+        return AsyncOnMemoryRepository;
+    })();
+    DDD.AsyncOnMemoryRepository = AsyncOnMemoryRepository;
 })(DDD || (DDD = {}));

@@ -13,72 +13,69 @@ module DDD.Spec {
         }
     }
 
-    describe('Repository', () => {
 
-        var expect = chai.expect;
+    var expect = chai.expect;
 
-        describe('OnMemoryRepository', () => {
+    describe('OnMemoryRepository', () => {
 
-            var repository;
-            var identity;
-            var name;
-            var person;
+        var repository: OnMemoryRepository<DDD.NumberIdentity, Person>;
+        var identity: DDD.NumberIdentity;
+        var name: string;
+        var person: Person;
 
-            beforeEach(() => {
-                repository = new OnMemoryRepository();
-                identity = new NumberIdentity(10);
-                name = 'yaakaito';
-                person = new Person(identity, name);
+        beforeEach(() => {
+            repository = new OnMemoryRepository<DDD.NumberIdentity, Person>();
+            identity = new NumberIdentity(10);
+            name = 'yaakaito';
+            person = new Person(identity, name);
 
+        });
+
+        describe('#store', () => {
+            it('can store entity, And can select it', () => {
+                var stored = repository.store(person);
+                expect(stored).to.equal(person);
+                
+                var resolved = repository.resolve(identity);
+                expect(resolved).to.equal(person);
+            });
+        });
+
+        describe('#resolveOption', () => {
+            it('returns Some<Entity> if the entity is stored', () => {
+                repository.store(person);
+
+                var option = repository.resolveOption(identity);
+                expect(option.isEmpty).to.be.false;
+                expect(option.get()).to.equal(person);
             });
 
-            describe('#store', () => {
-                it('can store entity, And can select it', () => {
-                    var stored = repository.store(person);
-                    expect(stored).to.equal(person);
-                    
-                    var resolved = repository.resolve(identity);
-                    expect(resolved).to.equal(person);
-                });
+            it('returns None<Entity> if the entity is not stored', () => {
+                var option = repository.resolveOption(identity);
+                expect(option.isEmpty).to.be.true;
             });
+        });
 
-            describe('#resolveOption', () => {
-                it('returns Some<Entity> if the entity is stored', () => {
-                    repository.store(person);
+        describe('#deleteByEntity', () => {
+            it('should delete stored entity if given it', () => {
+                repository.store(person);
 
-                    var option = repository.resolveOption(identity);
-                    expect(option.isEmpty).to.be.false;
-                    expect(option.get()).to.equal(person);
-                });
+                repository.deleteByEntity(person);
+                var resolved = repository.resolve(identity);
 
-                it('returns None<Entity> if the entity is not stored', () => {
-                    var option = repository.resolveOption(identity);
-                    expect(option.isEmpty).to.be.true;
-                });
+                expect(resolved).to.be.undefined;
             });
+        });
 
-            describe('#deleteByEntity', () => {
-                it('should delete stored entity if given it', () => {
-                    repository.store(person);
+        describe('#deleteByIdentity', () => {
+            it('should deelte stored entity if given thats identify', () => {
+                repository.store(person);
 
-                    repository.deleteByEntity(person);
-                    var resolved = repository.resolve(identity);
+                repository.deleteByIdentity(identity);
+                var resolved = repository.resolve(identity);
 
-                    expect(resolved).to.be.undefined;
-                });
-            });
-
-            describe('#deleteByIdentity', () => {
-                it('should deelte stored entity if given thats identify', () => {
-                    repository.store(person);
-
-                    repository.deleteByIdentity(identity);
-                    var resolved = repository.resolve(identity);
-
-                    expect(resolved).to.be.undefined;                    
-                })
-            });
-
+                expect(resolved).to.be.undefined;                    
+            })
         });
     });
 
