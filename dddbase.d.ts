@@ -17,3 +17,13 @@ declare module DDD {
         public equals(that: Entity<ID>): boolean;
     }
 }
+declare module DDD {
+    class OnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<ID>> {
+        private entities;
+        public resolveOption(identity: ID): monapt.Option<E>;
+        public resolve(identity: ID): E;
+        public store(entity: E): E;
+        public deleteByEntity(entity: E): void;
+        public deleteByIdentity(identity: ID): void;
+    }
+}

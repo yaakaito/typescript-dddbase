@@ -3,7 +3,7 @@ module.exports = (grunt) ->
         pkg: grunt.file.readJSON 'package.json'
         typescript:
             compile:
-                src: ['dddbase.ts']
+                src: ['src/*.ts']
                 dest: 'dddbase.js'
                 options:
                     module: 'commonjs'

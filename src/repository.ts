@@ -1,32 +1,37 @@
 /// <reference path="./identity.ts" />
 /// <reference path="./entity.ts" />
+/// <reference path="../definitions/monapt/monapt.d.ts" />
 
 
 module DDD {
 
-    export interface Repository<ID extends Identity<any>, E extends Entity<ID>> {
-        store(entity: E): E;
-        deleteByEntity(entity: E);
-        deleteByIdentity(identity: ID);
-    }
-
-    export class OnMemoryRepository<ID extends Identity<any>, E extends Entity<ID>> implements Repository<ID, E> {
+    export class OnMemoryRepository<ID extends Identity<any>, E extends Entity<ID>> {
         private entities: Object = {};
 
-        public resolveWithIdentity(identity: ID): Entity {
+        resolveOption(identity: ID): monapt.Option<E> {
+            var entity = this.resolve(identity);
+            if (entity != null) {
+                return new monapt.Some(entity);
+            }
+            else {
+                return new monapt.None<E>();
+            }
+        }
+
+        resolve(identity: ID): E {
             return this.entities[identity.getValue()];
         }
 
-        public store(entity: E): E {
+        store(entity: E): E {
             this.entities[entity.getIdentity().getValue()] = entity;
             return entity;
         }
 
-        public deleteByEntity(entity: E) {
+        deleteByEntity(entity: E) {
             this.deleteByIdentity(entity.getIdentity());
         }
 
-        public deleteByIdentity(identity: ID) {
+        deleteByIdentity(identity: ID) {
             delete this.entities[identity.getValue()];
         }
     }

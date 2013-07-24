@@ -6,6 +6,7 @@
         "test/**/*.ts"
     ],
     "serve_files" : [
+        "bower_components/monapt/monapt.js",
         "dddbase.js",
         "compiled/test/**/*.js"
     ]
