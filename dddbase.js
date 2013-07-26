@@ -84,6 +84,13 @@ var DDD;
             return entity;
         };
 
+        OnMemoryRepository.prototype.storeList = function (entityList) {
+            for (var i in entityList) {
+                this.store(entityList[i]);
+            }
+            return entityList;
+        };
+
         OnMemoryRepository.prototype.deleteByEntity = function (entity) {
             this.deleteByIdentity(entity.getIdentity());
             return this;
@@ -114,6 +121,13 @@ var DDD;
             var _this = this;
             return monapt.future(function (p) {
                 p.success(_this.core.store(entity));
+            });
+        };
+
+        AsyncOnMemoryRepository.prototype.storeList = function (entityList) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.storeList(entityList));
             });
         };
 

@@ -21,12 +21,18 @@ module DDD.Spec {
         var identity: DDD.NumberIdentity;
         var name: string;
         var person: Person;
+        var identity2: DDD.NumberIdentity;
+        var name2: string;
+        var person2: Person;
 
         beforeEach(() => {
             repository = new AsyncOnMemoryRepository<DDD.NumberIdentity, Person>();
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);
+            identity2 = new NumberIdentity(20);
+            name2 = 'yaakaito2';
+            person2 = new Person(identity2, name2);
 
         });
 
@@ -34,6 +40,17 @@ module DDD.Spec {
             it('should store entity, And future returns stored entity', (ok) => {
                 repository.store(person).onSuccess(entity => {
                     expect(entity).to.equal(person);
+                    ok();
+                });
+            });
+        });
+
+        describe('#storeList', () => {
+            it('should store entity list, And future returns stored entity list', (ok) => {
+                var persons = [person, person2];
+                repository.storeList(persons).onSuccess(entityList => {
+                    expect(entityList).to.equal(persons);
+                    expect(entityList).to.be.length(2);
                     ok();
                 });
             });
