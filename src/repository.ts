@@ -27,6 +27,13 @@ module DDD {
             return entity;
         }
 
+        storeList(entityList: E[]): E[] {
+            for (var i in entityList) {
+                this.store(entityList[i]);
+            }
+            return entityList;
+        }
+
         deleteByEntity(entity: E): OnMemoryRepository {
             this.deleteByIdentity(entity.getIdentity());
             return this;

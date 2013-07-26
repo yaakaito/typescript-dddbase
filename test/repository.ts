@@ -22,12 +22,19 @@ module DDD.Spec {
         var identity: DDD.NumberIdentity;
         var name: string;
         var person: Person;
+        var identity2: DDD.NumberIdentity;
+        var name2: string;
+        var person2: Person;
 
         beforeEach(() => {
             repository = new OnMemoryRepository<DDD.NumberIdentity, Person>();
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);
+            identity2 = new NumberIdentity(20);
+            name2 = 'yaakaito2';
+            person2 = new Person(identity2, name2);
+
 
         });
 
@@ -38,6 +45,19 @@ module DDD.Spec {
                 
                 var resolved = repository.resolve(identity);
                 expect(resolved).to.equal(person);
+            });
+        });
+
+        describe('#storeList', () => {
+            it('can store entity list, And can select them', () => {
+                var persons = [person, person2];
+                var stored = repository.storeList(persons);
+                expect(stored).to.equal(persons);
+
+                var resolved = repository.resolve(identity);
+                expect(resolved).to.equal(person);
+                var resolved2 = repository.resolve(identity2);
+                expect(resolved2).to.equal(person2);
             });
         });
 
