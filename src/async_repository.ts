@@ -22,6 +22,12 @@ module DDD {
             });
         }
 
+        storeList(entityList: E[]): monapt.Future<E[]> {
+            return monapt.future<E[]>(p => {
+                p.success(this.core.storeList(entityList));
+            });
+        }
+
         deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
             return monapt.future<AsyncOnMemoryRepository>(p => {
                 this.core.deleteByEntity(entity);
