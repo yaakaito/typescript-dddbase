@@ -3,5 +3,21 @@
   "version": "0.1.0",
   "dependencies": {
     "monapt": "git://github.com/yaakaito/monapt.git#~0.1.0"
-  }
+  },
+  "main": [
+    "dddbase.js",
+    "dddbase.min.js",
+    "dddbase.d.ts"
+  ],
+  "ignore": [
+    "Gruntfile.coffee",
+    ".gitattriute",
+    ".gitignore",
+    "package.json",
+    "testem.json",
+    "definitions/",
+    "src/",
+    "test/",
+    "build/"
+  ]
 }
