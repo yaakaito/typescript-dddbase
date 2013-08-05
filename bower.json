@@ -2,7 +2,7 @@
   "name": "typescript-dddbase",
   "version": "0.1.0",
   "dependencies": {
-    "monapt": "git://github.com/yaakaito/monapt.git#~0.1.0"
+    "monapt": "git://github.com/yaakaito/monapt.git#~0.2.0"
   },
   "main": [
     "dddbase.js",
