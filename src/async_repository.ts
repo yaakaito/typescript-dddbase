@@ -8,8 +8,6 @@ module DDD {
 
     export interface IAsyncRepository<ID extends Identity<any>, E extends Entity<any>> {
 
-        core: IRepository<ID, E>;
-
         resolve(identity: ID): monapt.Future<E>;
 
         store(entity: E): monapt.Future<E>;

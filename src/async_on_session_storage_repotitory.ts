@@ -8,8 +8,7 @@ module DDD {
 
     export class AsyncOnSessionStorageRepository<ID extends Identity<any>, E extends Entity<any>> implements IAsyncRepository<ID, E> {
 
-        // Implement in every repository extended from this repository.
-        core = new OnSessionStorageRepository<ID, E>();
+        constructor(private core: OnSessionStorageRepository<ID, E>) {}
 
         resolve(identity: ID): monapt.Future<E> {
             return monapt.future<E>(p => {

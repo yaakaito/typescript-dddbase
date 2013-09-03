@@ -19,10 +19,6 @@ module DDD.Spec {
         }
     }
 
-    class AsyncRepository extends AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person> {
-        core = new Repository();
-    }
-
     var expect = chai.expect;
 
     describe('AsyncOnSessionStorageRepository', () => {
@@ -36,8 +32,7 @@ module DDD.Spec {
         var person2: Person;
 
         beforeEach(() => {
-            //repository = AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>.createWithRepository<DDD.NumberIdentity, Person>(new Repository<DDD.NumberIdentity, Person>());
-            repository = new AsyncRepository();
+            repository = new AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>(new Repository());
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);

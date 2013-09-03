@@ -204,8 +204,8 @@ var DDD;
 var DDD;
 (function (DDD) {
     var AsyncOnSessionStorageRepository = (function () {
-        function AsyncOnSessionStorageRepository() {
-            this.core = new DDD.OnSessionStorageRepository();
+        function AsyncOnSessionStorageRepository(core) {
+            this.core = core;
         }
         AsyncOnSessionStorageRepository.prototype.resolve = function (identity) {
             var _this = this;

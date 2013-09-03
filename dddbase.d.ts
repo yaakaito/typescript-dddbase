@@ -30,7 +30,6 @@ declare module DDD {
 }
 declare module DDD {
     interface IAsyncRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
-        core: DDD.IRepository<ID, E>;
         resolve(identity: ID): monapt.Future<E>;
         store(entity: E): monapt.Future<E>;
         storeList(entityList: E[]): monapt.Future<E[]>;
@@ -51,7 +50,7 @@ declare module DDD {
 }
 declare module DDD {
     class AsyncOnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IAsyncRepository<ID, E> {
-        public core: DDD.OnMemoryRepository<ID, E>;
+        private core;
         public resolve(identity: ID): monapt.Future<E>;
         public store(entity: E): monapt.Future<E>;
         public storeList(entityList: E[]): monapt.Future<E[]>;
@@ -72,7 +71,8 @@ declare module DDD {
 }
 declare module DDD {
     class AsyncOnSessionStorageRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IAsyncRepository<ID, E> {
-        public core: DDD.OnSessionStorageRepository<ID, E>;
+        private core;
+        constructor(core: DDD.OnSessionStorageRepository<ID, E>);
         public resolve(identity: ID): monapt.Future<E>;
         public store(entity: E): monapt.Future<E>;
         public storeList(entityList: E[]): monapt.Future<E[]>;

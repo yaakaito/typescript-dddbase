@@ -9,7 +9,7 @@ module DDD {
 
     export class AsyncOnMemoryRepository<ID extends Identity<any>, E extends Entity<any>> implements IAsyncRepository<ID, E> {
 
-        core = new OnMemoryRepository<ID, E>();
+        private core = new OnMemoryRepository<ID, E>();
 
         resolve(identity: ID): monapt.Future<E> {
             return monapt.future<E>(p => {
