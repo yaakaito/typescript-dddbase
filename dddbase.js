@@ -150,3 +150,100 @@ var DDD;
     })();
     DDD.AsyncOnMemoryRepository = AsyncOnMemoryRepository;
 })(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
+    var OnSessionStorageRepository = (function () {
+        function OnSessionStorageRepository() {
+        }
+        OnSessionStorageRepository.prototype.resolveOption = function (identity) {
+            var entity = this.resolve(identity);
+            if (entity != null) {
+                return new monapt.Some(entity);
+            } else {
+                return new monapt.None();
+            }
+        };
+
+        OnSessionStorageRepository.prototype.resolve = function (identity) {
+            var json = JSON.parse(sessionStorage.getItem(identity.getValue()));
+            if (json) {
+                return this.parse(json);
+            }
+            return null;
+        };
+
+        OnSessionStorageRepository.prototype.parse = function (json) {
+            return new DDD.Entity(new DDD.Identity(json['identity']['value']));
+        };
+
+        OnSessionStorageRepository.prototype.store = function (entity) {
+            sessionStorage.setItem(entity.getIdentity().getValue(), JSON.stringify(entity));
+            return entity;
+        };
+
+        OnSessionStorageRepository.prototype.storeList = function (entityList) {
+            for (var i in entityList) {
+                this.store(entityList[i]);
+            }
+            return entityList;
+        };
+
+        OnSessionStorageRepository.prototype.deleteByEntity = function (entity) {
+            this.deleteByIdentity(entity.getIdentity());
+            return this;
+        };
+
+        OnSessionStorageRepository.prototype.deleteByIdentity = function (identity) {
+            sessionStorage.removeItem(identity.getValue());
+            return this;
+        };
+        return OnSessionStorageRepository;
+    })();
+    DDD.OnSessionStorageRepository = OnSessionStorageRepository;
+})(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
+    var AsyncOnSessionStorageRepository = (function () {
+        function AsyncOnSessionStorageRepository() {
+            this.core = new DDD.OnSessionStorageRepository();
+        }
+        AsyncOnSessionStorageRepository.prototype.resolve = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.resolveOption(identity).get());
+            });
+        };
+
+        AsyncOnSessionStorageRepository.prototype.store = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.store(entity));
+            });
+        };
+
+        AsyncOnSessionStorageRepository.prototype.storeList = function (entityList) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.storeList(entityList));
+            });
+        };
+
+        AsyncOnSessionStorageRepository.prototype.deleteByEntity = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByEntity(entity);
+                p.success(_this);
+            });
+        };
+
+        AsyncOnSessionStorageRepository.prototype.deleteByIdentity = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByIdentity(identity);
+                p.success(_this);
+            });
+        };
+        return AsyncOnSessionStorageRepository;
+    })();
+    DDD.AsyncOnSessionStorageRepository = AsyncOnSessionStorageRepository;
+})(DDD || (DDD = {}));

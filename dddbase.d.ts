@@ -1,3 +1,4 @@
+/// <reference path="definitions/monapt/monapt.d.ts" />
 declare module DDD {
     class Identity<T> {
         private value;
@@ -18,7 +19,27 @@ declare module DDD {
     }
 }
 declare module DDD {
-    class OnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
+    interface IRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
+        resolveOption(identity: ID): monapt.Option<E>;
+        resolve(identity: ID): E;
+        store(entity: E): E;
+        storeList(entityList: E[]): E[];
+        deleteByEntity(entity: E): IRepository<ID, E>;
+        deleteByIdentity(identity: ID): IRepository<ID, E>;
+    }
+}
+declare module DDD {
+    interface IAsyncRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
+        core: DDD.IRepository<ID, E>;
+        resolve(identity: ID): monapt.Future<E>;
+        store(entity: E): monapt.Future<E>;
+        storeList(entityList: E[]): monapt.Future<E[]>;
+        deleteByEntity(entity: E): monapt.Future<IAsyncRepository<ID, E>>;
+        deleteByIdentity(identity: ID): monapt.Future<IAsyncRepository<ID, E>>;
+    }
+}
+declare module DDD {
+    class OnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IRepository<ID, E> {
         private entities;
         public resolveOption(identity: ID): monapt.Option<E>;
         public resolve(identity: ID): E;
@@ -29,12 +50,33 @@ declare module DDD {
     }
 }
 declare module DDD {
-    class AsyncOnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> {
-        private core;
+    class AsyncOnMemoryRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IAsyncRepository<ID, E> {
+        public core: DDD.OnMemoryRepository<ID, E>;
         public resolve(identity: ID): monapt.Future<E>;
         public store(entity: E): monapt.Future<E>;
         public storeList(entityList: E[]): monapt.Future<E[]>;
         public deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>>;
         public deleteByIdentity(identity: ID): monapt.Future<AsyncOnMemoryRepository<ID, E>>;
+    }
+}
+declare module DDD {
+    class OnSessionStorageRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IRepository<ID, E> {
+        public resolveOption(identity: ID): monapt.Option<E>;
+        public resolve(identity: ID): E;
+        public parse(json: Object): E;
+        public store(entity: E): E;
+        public storeList(entityList: E[]): E[];
+        public deleteByEntity(entity: E): OnSessionStorageRepository<ID, E>;
+        public deleteByIdentity(identity: ID): OnSessionStorageRepository<ID, E>;
+    }
+}
+declare module DDD {
+    class AsyncOnSessionStorageRepository<ID extends DDD.Identity<any>, E extends DDD.Entity<any>> implements DDD.IAsyncRepository<ID, E> {
+        public core: DDD.OnSessionStorageRepository<ID, E>;
+        public resolve(identity: ID): monapt.Future<E>;
+        public store(entity: E): monapt.Future<E>;
+        public storeList(entityList: E[]): monapt.Future<E[]>;
+        public deleteByEntity(entity: E): monapt.Future<AsyncOnSessionStorageRepository<ID, E>>;
+        public deleteByIdentity(identity: ID): monapt.Future<AsyncOnSessionStorageRepository<ID, E>>;
     }
 }

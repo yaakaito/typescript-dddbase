@@ -6,41 +6,19 @@
 
 module DDD {
 
-    export class AsyncOnMemoryRepository<ID extends Identity<any>, E extends Entity<any>> {
+    export interface IAsyncRepository<ID extends Identity<any>, E extends Entity<any>> {
 
-        private core = new OnMemoryRepository<ID, E>();
+        core: IRepository<ID, E>;
 
-        resolve(identity: ID): monapt.Future<E> {
-            return monapt.future<E>(p => {
-                p.success(this.core.resolveOption(identity).get());
-            });
-        }
+        resolve(identity: ID): monapt.Future<E>;
 
-        store(entity: E): monapt.Future<E> {
-            return monapt.future<E>(p => {
-                p.success(this.core.store(entity));
-            });
-        }
+        store(entity: E): monapt.Future<E>;
 
-        storeList(entityList: E[]): monapt.Future<E[]> {
-            return monapt.future<E[]>(p => {
-                p.success(this.core.storeList(entityList));
-            });
-        }
+        storeList(entityList: E[]): monapt.Future<E[]>;
 
-        deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
-            return monapt.future<AsyncOnMemoryRepository>(p => {
-                this.core.deleteByEntity(entity);
-                p.success(this);
-            });
-        }
+        deleteByEntity(entity: E): monapt.Future<IAsyncRepository<ID, E>>;
 
-        deleteByIdentity(identity: ID): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
-            return monapt.future<AsyncOnMemoryRepository>(p => {
-                this.core.deleteByIdentity(identity);
-                p.success(this);
-            });
-        }
+        deleteByIdentity(identity: ID): monapt.Future<IAsyncRepository<ID, E>>;
     }
 
 }

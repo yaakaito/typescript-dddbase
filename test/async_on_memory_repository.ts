@@ -1,6 +1,6 @@
 /// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
-/// <reference path="../src/async_repository.ts" />
+/// <reference path="../src/async_on_memory_repotitory.ts" />
 /// <reference path="../definitions/mocha/mocha.d.ts" />
 /// <reference path="../definitions/chai/chai.d.ts" />
 
