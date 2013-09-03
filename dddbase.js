@@ -176,8 +176,12 @@ var DDD;
             return new DDD.Entity(new DDD.Identity(json['identity']['value']));
         };
 
+        OnSessionStorageRepository.prototype.stringify = function (entity) {
+            return JSON.stringify(entity);
+        };
+
         OnSessionStorageRepository.prototype.store = function (entity) {
-            sessionStorage.setItem(entity.getIdentity().getValue(), JSON.stringify(entity));
+            sessionStorage.setItem(entity.getIdentity().getValue(), this.stringify(entity));
             return entity;
         };
 

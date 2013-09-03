@@ -30,8 +30,13 @@ module DDD {
             return new Entity<Identity<any>>(new Identity<any>(json['identity']['value']));
         }
 
+        // Can implement in every repository extended from this repository.
+        stringify(entity: E): string {
+            return JSON.stringify(entity);
+        }
+
         store(entity: E): E {
-            sessionStorage.setItem(entity.getIdentity().getValue(), JSON.stringify(entity));
+            sessionStorage.setItem(entity.getIdentity().getValue(), this.stringify(entity));
             return entity;
         }
 

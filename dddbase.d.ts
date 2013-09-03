@@ -63,6 +63,7 @@ declare module DDD {
         public resolveOption(identity: ID): monapt.Option<E>;
         public resolve(identity: ID): E;
         public parse(json: Object): E;
+        public stringify(entity: E): string;
         public store(entity: E): E;
         public storeList(entityList: E[]): E[];
         public deleteByEntity(entity: E): OnSessionStorageRepository<ID, E>;
