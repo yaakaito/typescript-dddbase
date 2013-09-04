@@ -1,4 +1,3 @@
-/// <reference path="definitions/monapt/monapt.d.ts" />
 declare module DDD {
     class Identity<T> {
         private value;
