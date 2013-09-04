@@ -1,6 +1,6 @@
 /// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
-/// <reference path="../src/repository.ts" />
+/// <reference path="../src/on_session_storage_repository.ts" />
 /// <reference path="../definitions/mocha/mocha.d.ts" />
 /// <reference path="../definitions/chai/chai.d.ts" />
 
@@ -13,12 +13,11 @@ module DDD.Spec {
         }
     }
 
-
     var expect = chai.expect;
 
-    describe('OnMemoryRepository', () => {
+    describe('OnSessionStorageRepository', () => {
 
-        var repository: OnMemoryRepository<DDD.NumberIdentity, Person>;
+        var repository: OnSessionStorageRepository<DDD.NumberIdentity, Person>;
         var identity: DDD.NumberIdentity;
         var name: string;
         var person: Person;
@@ -27,24 +26,34 @@ module DDD.Spec {
         var person2: Person;
 
         beforeEach(() => {
-            repository = new OnMemoryRepository<DDD.NumberIdentity, Person>();
+            repository = new OnSessionStorageRepository({
+                parse: (json: Object): Person => {
+                    return new Person(new NumberIdentity(json['identity']['value']), json['name']);
+                },
+                stringify: (person: Person): string => {
+                    return JSON.stringify(person);
+                }
+            });
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);
             identity2 = new NumberIdentity(20);
             name2 = 'yaakaito2';
             person2 = new Person(identity2, name2);
+        });
 
-
+        afterEach(() => {
+            sessionStorage.clear();
         });
 
         describe('#store', () => {
             it('can store entity, And can select it', () => {
                 var stored = repository.store(person);
                 expect(stored).to.equal(person);
-                
+
                 var resolved = repository.resolve(identity);
-                expect(resolved).to.equal(person);
+                expect(resolved.getIdentity().getValue()).to.equal(person.getIdentity().getValue());
+                expect(resolved.name).to.equal(person.name);
             });
         });
 
@@ -55,9 +64,11 @@ module DDD.Spec {
                 expect(stored).to.equal(persons);
 
                 var resolved = repository.resolve(identity);
-                expect(resolved).to.equal(person);
+                expect(resolved.getIdentity().getValue()).to.equal(person.getIdentity().getValue());
+                expect(resolved.name).to.equal(person.name);
                 var resolved2 = repository.resolve(identity2);
-                expect(resolved2).to.equal(person2);
+                expect(resolved2.getIdentity().getValue()).to.equal(person2.getIdentity().getValue());
+                expect(resolved2.name).to.equal(person2.name);
             });
         });
 
@@ -67,7 +78,7 @@ module DDD.Spec {
 
                 var option = repository.resolveOption(identity);
                 expect(option.isEmpty).to.be.false;
-                expect(option.get()).to.equal(person);
+                expect(option.get().getIdentity().getValue()).to.equal(person.getIdentity().getValue());
             });
 
             it('returns None<Entity> if the entity is not stored', () => {
@@ -83,18 +94,18 @@ module DDD.Spec {
                 repository.deleteByEntity(person);
                 var resolved = repository.resolve(identity);
 
-                expect(resolved).to.be.undefined;
+                expect(resolved).to.be.null;
             });
         });
 
         describe('#deleteByIdentity', () => {
-            it('should deelte stored entity if given thats identify', () => {
+            it('should delete stored entity if given thats identify', () => {
                 repository.store(person);
 
                 repository.deleteByIdentity(identity);
                 var resolved = repository.resolve(identity);
 
-                expect(resolved).to.be.undefined;                    
+                expect(resolved).to.be.null;
             })
         });
     });
