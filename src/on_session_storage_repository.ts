@@ -5,7 +5,20 @@
 
 module DDD {
 
+    export interface ISessionStorageMapper<E extends Entity<any>> {
+        parse(json: Object): E;
+        stringify(entity: E): string;
+    }
+
     export class OnSessionStorageRepository<ID extends Identity<any>, E extends Entity<any>> implements IRepository<ID, E> {
+
+        constructor(mapper: ISessionStorageMapper<E>) {
+            this.parse = mapper.parse;
+            this.stringify = mapper.stringify;
+        }
+
+        parse: (json: Object) => E;
+        stringify: (entity: E) => string;
 
         resolveOption(identity: ID): monapt.Option<E> {
             var entity = this.resolve(identity);
@@ -23,16 +36,6 @@ module DDD {
                 return this.parse(json);
             }
             return null;
-        }
-
-        // Implement in every repository extended from this repository.
-        parse(json: Object): E {
-            return new Entity<Identity<any>>(new Identity<any>(json['identity']['value']));
-        }
-
-        // Can implement in every repository extended from this repository.
-        stringify(entity: E): string {
-            return JSON.stringify(entity);
         }
 
         store(entity: E): E {

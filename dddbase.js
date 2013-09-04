@@ -62,6 +62,52 @@ var DDD;
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
+    var AsyncRepository = (function () {
+        function AsyncRepository(core) {
+            this.core = core;
+        }
+        AsyncRepository.prototype.resolve = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.resolveOption(identity).get());
+            });
+        };
+
+        AsyncRepository.prototype.store = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.store(entity));
+            });
+        };
+
+        AsyncRepository.prototype.storeList = function (entityList) {
+            var _this = this;
+            return monapt.future(function (p) {
+                p.success(_this.core.storeList(entityList));
+            });
+        };
+
+        AsyncRepository.prototype.deleteByEntity = function (entity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByEntity(entity);
+                p.success(_this);
+            });
+        };
+
+        AsyncRepository.prototype.deleteByIdentity = function (identity) {
+            var _this = this;
+            return monapt.future(function (p) {
+                _this.core.deleteByIdentity(identity);
+                p.success(_this);
+            });
+        };
+        return AsyncRepository;
+    })();
+    DDD.AsyncRepository = AsyncRepository;
+})(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
     var OnMemoryRepository = (function () {
         function OnMemoryRepository() {
             this.entities = {};
@@ -106,54 +152,21 @@ var DDD;
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
-    var AsyncOnMemoryRepository = (function () {
+    var AsyncOnMemoryRepository = (function (_super) {
+        __extends(AsyncOnMemoryRepository, _super);
         function AsyncOnMemoryRepository() {
-            this.core = new DDD.OnMemoryRepository();
+            _super.call(this, new DDD.OnMemoryRepository());
         }
-        AsyncOnMemoryRepository.prototype.resolve = function (identity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.resolveOption(identity).get());
-            });
-        };
-
-        AsyncOnMemoryRepository.prototype.store = function (entity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.store(entity));
-            });
-        };
-
-        AsyncOnMemoryRepository.prototype.storeList = function (entityList) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.storeList(entityList));
-            });
-        };
-
-        AsyncOnMemoryRepository.prototype.deleteByEntity = function (entity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                _this.core.deleteByEntity(entity);
-                p.success(_this);
-            });
-        };
-
-        AsyncOnMemoryRepository.prototype.deleteByIdentity = function (identity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                _this.core.deleteByIdentity(identity);
-                p.success(_this);
-            });
-        };
         return AsyncOnMemoryRepository;
-    })();
+    })(DDD.AsyncRepository);
     DDD.AsyncOnMemoryRepository = AsyncOnMemoryRepository;
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
     var OnSessionStorageRepository = (function () {
-        function OnSessionStorageRepository() {
+        function OnSessionStorageRepository(mapper) {
+            this.parse = mapper.parse;
+            this.stringify = mapper.stringify;
         }
         OnSessionStorageRepository.prototype.resolveOption = function (identity) {
             var entity = this.resolve(identity);
@@ -170,14 +183,6 @@ var DDD;
                 return this.parse(json);
             }
             return null;
-        };
-
-        OnSessionStorageRepository.prototype.parse = function (json) {
-            return new DDD.Entity(new DDD.Identity(json['identity']['value']));
-        };
-
-        OnSessionStorageRepository.prototype.stringify = function (entity) {
-            return JSON.stringify(entity);
         };
 
         OnSessionStorageRepository.prototype.store = function (entity) {
@@ -207,47 +212,12 @@ var DDD;
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
-    var AsyncOnSessionStorageRepository = (function () {
-        function AsyncOnSessionStorageRepository(core) {
-            this.core = core;
+    var AsyncOnSessionStorageRepository = (function (_super) {
+        __extends(AsyncOnSessionStorageRepository, _super);
+        function AsyncOnSessionStorageRepository(mapper) {
+            _super.call(this, new DDD.OnSessionStorageRepository(mapper));
         }
-        AsyncOnSessionStorageRepository.prototype.resolve = function (identity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.resolveOption(identity).get());
-            });
-        };
-
-        AsyncOnSessionStorageRepository.prototype.store = function (entity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.store(entity));
-            });
-        };
-
-        AsyncOnSessionStorageRepository.prototype.storeList = function (entityList) {
-            var _this = this;
-            return monapt.future(function (p) {
-                p.success(_this.core.storeList(entityList));
-            });
-        };
-
-        AsyncOnSessionStorageRepository.prototype.deleteByEntity = function (entity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                _this.core.deleteByEntity(entity);
-                p.success(_this);
-            });
-        };
-
-        AsyncOnSessionStorageRepository.prototype.deleteByIdentity = function (identity) {
-            var _this = this;
-            return monapt.future(function (p) {
-                _this.core.deleteByIdentity(identity);
-                p.success(_this);
-            });
-        };
         return AsyncOnSessionStorageRepository;
-    })();
+    })(DDD.AsyncRepository);
     DDD.AsyncOnSessionStorageRepository = AsyncOnSessionStorageRepository;
 })(DDD || (DDD = {}));

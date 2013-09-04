@@ -13,12 +13,6 @@ module DDD.Spec {
         }
     }
 
-    class Repository extends OnSessionStorageRepository<DDD.NumberIdentity, Person> {
-        parse(json: Object): Person {
-            return new Person(new NumberIdentity(json['identity']['value']), json['name']);
-        }
-    }
-
     var expect = chai.expect;
 
     describe('AsyncOnSessionStorageRepository', () => {
@@ -32,7 +26,14 @@ module DDD.Spec {
         var person2: Person;
 
         beforeEach(() => {
-            repository = new AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>(new Repository());
+            repository = new AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>({
+                parse: (json: Object): Person => {
+                    return new Person(new NumberIdentity(json['identity']['value']), json['name']);
+                },
+                stringify: (person: Person): string => {
+                    return JSON.stringify(person);
+                }
+            });
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);
