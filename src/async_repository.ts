@@ -6,9 +6,9 @@
 
 module DDD {
 
-    export class AsyncOnMemoryRepository<ID extends Identity<any>, E extends Entity<any>> {
+    export class AsyncRepository<ID extends Identity<any>, E extends Entity<any>> {
 
-        private core = new OnMemoryRepository<ID, E>();
+        constructor(private core: IRepository<ID, E>) {}
 
         resolve(identity: ID): monapt.Future<E> {
             return monapt.future<E>(p => {
@@ -28,19 +28,18 @@ module DDD {
             });
         }
 
-        deleteByEntity(entity: E): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
-            return monapt.future<AsyncOnMemoryRepository>(p => {
+        deleteByEntity(entity: E): monapt.Future<AsyncRepository<ID, E>> {
+            return monapt.future<AsyncRepository>(p => {
                 this.core.deleteByEntity(entity);
                 p.success(this);
             });
         }
 
-        deleteByIdentity(identity: ID): monapt.Future<AsyncOnMemoryRepository<ID, E>> {
-            return monapt.future<AsyncOnMemoryRepository>(p => {
+        deleteByIdentity(identity: ID): monapt.Future<AsyncRepository<ID, E>> {
+            return monapt.future<AsyncRepository>(p => {
                 this.core.deleteByIdentity(identity);
                 p.success(this);
             });
         }
     }
-
 }

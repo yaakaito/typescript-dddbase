@@ -1,6 +1,6 @@
 /// <reference path="../src/identity.ts" />
 /// <reference path="../src/entity.ts" />
-/// <reference path="../src/async_repository.ts" />
+/// <reference path="../src/async_on_session_storage_repotitory.ts" />
 /// <reference path="../definitions/mocha/mocha.d.ts" />
 /// <reference path="../definitions/chai/chai.d.ts" />
 
@@ -15,9 +15,9 @@ module DDD.Spec {
 
     var expect = chai.expect;
 
-    describe('AsyncOnMemoryRepository', () => {
+    describe('AsyncOnSessionStorageRepository', () => {
 
-        var repository: AsyncOnMemoryRepository<DDD.NumberIdentity, Person>;
+        var repository: AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>;
         var identity: DDD.NumberIdentity;
         var name: string;
         var person: Person;
@@ -26,7 +26,14 @@ module DDD.Spec {
         var person2: Person;
 
         beforeEach(() => {
-            repository = new AsyncOnMemoryRepository<DDD.NumberIdentity, Person>();
+            repository = new AsyncOnSessionStorageRepository<DDD.NumberIdentity, Person>({
+                parse: (json: Object): Person => {
+                    return new Person(new NumberIdentity(json['identity']['value']), json['name']);
+                },
+                stringify: (person: Person): string => {
+                    return JSON.stringify(person);
+                }
+            });
             identity = new NumberIdentity(10);
             name = 'yaakaito';
             person = new Person(identity, name);
@@ -34,6 +41,10 @@ module DDD.Spec {
             name2 = 'yaakaito2';
             person2 = new Person(identity2, name2);
 
+        });
+
+        afterEach(() => {
+            sessionStorage.clear();
         });
 
         describe('#store', () => {
@@ -60,7 +71,8 @@ module DDD.Spec {
             it('returns succeed Futrue<Entity> if the entity is stored', (ok) => {
                 repository.store(person).onSuccess(entity => {
                     repository.resolve(identity).onSuccess(entity => {
-                        expect(entity).to.equal(person);
+                        expect(entity.getIdentity().getValue()).to.equal(person.getIdentity().getValue());
+                        expect(entity.name).to.equal(person.name);
                         ok();
                     });
                 });
@@ -96,7 +108,7 @@ module DDD.Spec {
                             ok();
                         });
                     });
-                });                
+                });
             });
         });
     });
