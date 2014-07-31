@@ -108,6 +108,66 @@ var DDD;
 })(DDD || (DDD = {}));
 var DDD;
 (function (DDD) {
+    var OnLocalStorageRepository = (function () {
+        function OnLocalStorageRepository(mapper) {
+            this.parse = mapper.parse;
+            this.stringify = mapper.stringify;
+        }
+        OnLocalStorageRepository.prototype.resolveOption = function (identity) {
+            var entity = this.resolve(identity);
+            if (entity != null) {
+                return new monapt.Some(entity);
+            } else {
+                return new monapt.None();
+            }
+        };
+
+        OnLocalStorageRepository.prototype.resolve = function (identity) {
+            var json = JSON.parse(localStorage.getItem(identity.getValue()));
+            if (json) {
+                return this.parse(json);
+            }
+            return null;
+        };
+
+        OnLocalStorageRepository.prototype.store = function (entity) {
+            localStorage.setItem(entity.getIdentity().getValue(), this.stringify(entity));
+            return entity;
+        };
+
+        OnLocalStorageRepository.prototype.storeList = function (entityList) {
+            for (var i in entityList) {
+                this.store(entityList[i]);
+            }
+            return entityList;
+        };
+
+        OnLocalStorageRepository.prototype.deleteByEntity = function (entity) {
+            this.deleteByIdentity(entity.getIdentity());
+            return this;
+        };
+
+        OnLocalStorageRepository.prototype.deleteByIdentity = function (identity) {
+            localStorage.removeItem(identity.getValue());
+            return this;
+        };
+        return OnLocalStorageRepository;
+    })();
+    DDD.OnLocalStorageRepository = OnLocalStorageRepository;
+})(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
+    var AsyncOnLocalStorageRepository = (function (_super) {
+        __extends(AsyncOnLocalStorageRepository, _super);
+        function AsyncOnLocalStorageRepository(mapper) {
+            _super.call(this, new DDD.OnLocalStorageRepository(mapper));
+        }
+        return AsyncOnLocalStorageRepository;
+    })(DDD.AsyncRepository);
+    DDD.AsyncOnLocalStorageRepository = AsyncOnLocalStorageRepository;
+})(DDD || (DDD = {}));
+var DDD;
+(function (DDD) {
     var OnMemoryRepository = (function () {
         function OnMemoryRepository() {
             this.entities = {};
