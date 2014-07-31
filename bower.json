@@ -1,6 +1,6 @@
 {
   "name": "typescript-dddbase",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "dependencies": {
     "monapt": "git://github.com/yaakaito/monapt.git#>=0.2.2"
   },
