@@ -29,14 +29,14 @@ module DDD {
         }
 
         deleteByEntity(entity: E): monapt.Future<AsyncRepository<ID, E>> {
-            return monapt.future<AsyncRepository>(p => {
+            return monapt.future<AsyncRepository<ID, E>>(p => {
                 this.core.deleteByEntity(entity);
                 p.success(this);
             });
         }
 
         deleteByIdentity(identity: ID): monapt.Future<AsyncRepository<ID, E>> {
-            return monapt.future<AsyncRepository>(p => {
+            return monapt.future<AsyncRepository<ID, E>>(p => {
                 this.core.deleteByIdentity(identity);
                 p.success(this);
             });
