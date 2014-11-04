@@ -31,11 +31,9 @@ module DDD {
         }
 
         resolve(identity: ID): E {
-            var json = JSON.parse(sessionStorage.getItem(identity.getValue()));
-            if (json) {
-                return this.parse(json);
-            }
-            return null;
+            var item = sessionStorage.getItem(identity.getValue());
+            var json = item ? JSON.parse(item) : null;
+            return json ? this.parse(json) : null;
         }
 
         store(entity: E): E {
